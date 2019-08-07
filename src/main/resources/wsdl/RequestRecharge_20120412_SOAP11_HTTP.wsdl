@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<wsdl:definitions targetNamespace="http://eai.telkom.co.za/services/RequestRecharge/20120412" name="RequestRecharge_20120412" xmlns:tns="http://eai.telkom.co.za/services/RequestRecharge/20120412" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns3="http://eai.telkom.co.za/schemas/RequestRecharge/20111130/DataModel/Schema.xsd" xmlns:ns2="http://eai.telkom.co.za/schemas/RequestRecharge/20111130/DataModel/Schema.xsd" xmlns:ns1="http://eai.telkom.co.za/EnterpriseServiceMetaData/20110801" xmlns:ns0="http://www.w3.org/2005/08/addressing" xmlns:eaifault="http://eai.telkom.co.za/EaiEsbException/20120502" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:types>
+<!-- edited with XMLSpy v2011 sp1 (x64) (http://www.altova.com) by Soteri Panagou (Telkom SA Limited) -->
+<xsd:schema targetNamespace="http://eai.telkom.co.za/EaiEsbException/20120502" xmlns:ns2="http://eai.telkom.co.za/EnterpriseServiceMetaData/20110801" xmlns:ns1="http://www.w3.org/2005/08/addressing" version="1.0" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tsmd="http://eai.telkom.co.za/EaiEsbException/20120502">
+<xsd:import namespace="http://www.w3.org/2005/08/addressing"/>
+<xsd:import namespace="http://eai.telkom.co.za/EnterpriseServiceMetaData/20110801"/>
+<xsd:complexType name="ResultType">
+<xsd:annotation>
+<xsd:documentation>The Result Reporting Message Structure</xsd:documentation>
+</xsd:annotation>
+<xsd:sequence>
+<xsd:element name="ResultCode">
+<xsd:annotation>
+<xsd:documentation> Container type for the mandatory result code. Three different statuses: success, fail and reject. - Success is indicated with the value 0. - Failure(indicated that a resend could possible be successful) is represented by negative values - Rejection(indicated that a resend would be refected again) by positive values. </xsd:documentation>
+</xsd:annotation>
+<xsd:simpleType>
+<xsd:restriction base="xsd:int"/>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="ResultMsgCode" minOccurs="0">
+<xsd:annotation>
+<xsd:documentation> Container type for the optional result message code. The recommended way is to concatenate the system identifier with the specific error code number.This is only recommended and not enforced in the validation. </xsd:documentation>
+</xsd:annotation>
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:minLength value="1"/>
+<xsd:maxLength value="64"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+<xsd:element name="ResultMsg" minOccurs="0">
+<xsd:annotation>
+<xsd:documentation> Container type for the optional detail description of the result message code. </xsd:documentation>
+</xsd:annotation>
+<xsd:simpleType>
+<xsd:restriction base="xsd:string">
+<xsd:minLength value="1"/>
+</xsd:restriction>
+</xsd:simpleType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="Result" type="tsmd:ResultType"/>
+<xsd:element name="Exception">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="Result" type="tsmd:ResultType"/>
+<xsd:element name="Headers">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element minOccurs="0" ref="ns1:MessageID"/>
+<xsd:element minOccurs="0" ref="ns1:RelatesTo"/>
+<xsd:element minOccurs="0" ref="ns2:Metadata"/>
+<xsd:element minOccurs="0" ref="ns2:SenderID"/>
+<xsd:element minOccurs="0" ref="ns2:TransactionGroupID"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:element>
+</xsd:schema>
+<xs:schema targetNamespace="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.w3.org/2005/08/addressing" elementFormDefault="qualified" attributeFormDefault="unqualified" blockDefault="#all" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:esmd="http://eai.telkom.co.za/EnterpriseServiceMetaData/20110801">
+<xs:import namespace="http://eai.telkom.co.za/EnterpriseServiceMetaData/20110801"/>
+<xs:complexType name="AttributedQNameType">
+<xs:simpleContent>
+<xs:extension base="xs:QName">
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+<xs:complexType name="AttributedURIType">
+<xs:simpleContent>
+<xs:extension base="xs:anyURI">
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+<xs:complexType name="AttributedUnsignedLongType">
+<xs:simpleContent>
+<xs:extension base="xs:unsignedLong">
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+<xs:complexType name="EndpointReferenceType">
+<xs:sequence>
+<xs:element name="Address" type="tns:AttributedURIType"/>
+<xs:element minOccurs="0" ref="tns:ReferenceParameters"/>
+<xs:element minOccurs="0" ref="tns:Metadata"/>
+<xs:any namespace="##other" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:complexType>
+<xs:simpleType name="FaultCodesOpenEnumType">
+<xs:union memberTypes="tns:FaultCodesType xs:QName"/>
+</xs:simpleType>
+<xs:simpleType name="FaultCodesType">
+<xs:restriction base="xs:QName">
+<xs:enumeration value="tns:InvalidAddressingHeader"/>
+<xs:enumeration value="tns:InvalidAddress"/>
+<xs:enumeration value="tns:InvalidEPR"/>
+<xs:enumeration value="tns:InvalidCardinality"/>
+<xs:enumeration value="tns:MissingAddressInEPR"/>
+<xs:enumeration value="tns:DuplicateMessageID"/>
+<xs:enumeration value="tns:ActionMismatch"/>
+<xs:enumeration value="tns:MessageAddressingHeaderRequired"/>
+<xs:enumeration value="tns:DestinationUnreachable"/>
+<xs:enumeration value="tns:ActionNotSupported"/>
+<xs:enumeration value="tns:EndpointUnavailable"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:complexType name="MetadataType">
+<xs:sequence>
+<xs:any namespace="##any" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:complexType>
+<xs:complexType name="ProblemActionType">
+<xs:sequence>
+<xs:element minOccurs="0" ref="tns:Action"/>
+<xs:element name="SoapAction" minOccurs="0" type="xs:anyURI"/>
+</xs:sequence>
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:complexType>
+<xs:complexType name="ReferenceParametersType">
+<xs:sequence>
+<xs:any namespace="##any" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:complexType>
+<xs:complexType name="RelatesToType">
+<xs:simpleContent>
+<xs:extension base="xs:anyURI">
+<xs:attribute name="RelationshipType" type="tns:RelationshipTypeOpenEnum" default="http://www.w3.org/2005/08/addressing/reply"/>
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+<xs:simpleType name="RelationshipType">
+<xs:restriction base="xs:anyURI">
+<xs:enumeration value="http://www.w3.org/2005/08/addressing/reply"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="RelationshipTypeOpenEnum">
+<xs:union memberTypes="tns:RelationshipType xs:anyURI"/>
+</xs:simpleType>
+<xs:element name="Action" type="tns:AttributedURIType"/>
+<xs:element name="EndpointReference" type="tns:EndpointReferenceType"/>
+<xs:element name="FaultTo" type="tns:EndpointReferenceType"/>
+<xs:element name="From">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="Address" type="tns:AttributedURIType"/>
+<xs:element name="ReferenceParameters">
+<xs:complexType>
+<xs:sequence>
+<xs:element minOccurs="0" ref="esmd:TransactionGroupID">
+<xs:annotation>
+<xs:documentation>This is an optional identifier to be used by a system when several technical transactions are representing one business transaction. Example: Business transaction impplemented via a request and call-back transaction. The call-back will have a new MessageId as it is a new message but might have the same CorrelationId. The definition of the values is owned by the system sending the message.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element minOccurs="0" ref="esmd:Metadata">
+<xs:annotation>
+<xs:documentation>Metadata that can be specified by a client.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element ref="esmd:SenderID">
+<xs:annotation>
+<xs:documentation>This is the identifier of the sending system</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:any namespace="##any" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:complexType>
+</xs:element>
+<xs:element minOccurs="0" ref="tns:Metadata"/>
+<xs:any namespace="##other" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:anyAttribute namespace="##other" processContents="lax"/>
+</xs:complexType>
+</xs:element>
+<xs:element name="MessageID" type="tns:AttributedURIType"/>
+<xs:element name="Metadata" type="tns:MetadataType"/>
+<xs:element name="ProblemAction" type="tns:ProblemActionType"/>
+<xs:element name="ProblemHeaderQName" type="tns:AttributedQNameType"/>
+<xs:element name="ProblemIRI" type="tns:AttributedURIType"/>
+<xs:element name="ReferenceParameters" type="tns:ReferenceParametersType"/>
+<xs:element name="RelatesTo" type="tns:RelatesToType"/>
+<xs:element name="ReplyTo" type="tns:EndpointReferenceType"/>
+<xs:element name="RetryAfter" type="tns:AttributedUnsignedLongType"/>
+<xs:element name="To" type="tns:AttributedURIType"/>
+<xs:attribute name="IsReferenceParameter" type="xs:boolean"/>
+</xs:schema>
+<xsd:schema targetNamespace="http://eai.telkom.co.za/EnterpriseServiceMetaData/20110801" version="1.0" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tsmd="http://eai.telkom.co.za/EnterpriseServiceMetaData/20110801">
+<xsd:complexType name="MetadataType">
+<xsd:sequence>
+<xsd:element name="Param" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="Key" type="tsmd:MetadataTypeStringType" use="required"/>
+<xsd:attribute name="Qualifier" type="tsmd:MetadataTypeStringType" use="required">
+<xsd:annotation>
+<xsd:documentation>Classification of the metadata</xsd:documentation>
+</xsd:annotation>
+</xsd:attribute>
+<xsd:attribute name="Value" type="tsmd:MetadataTypeStringType" use="required"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:simpleType name="MetadataTypeStringType">
+<xsd:restriction base="xsd:string">
+<xsd:minLength value="1"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="SenderIDStringType">
+<xsd:restriction base="xsd:string">
+<xsd:minLength value="1"/>
+<xsd:maxLength value="64"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:complexType name="SenderIDType">
+<xsd:simpleContent>
+<xsd:extension base="tsmd:SenderIDStringType">
+<xsd:attribute name="EndUserIdentity" type="xsd:string">
+<xsd:annotation>
+<xsd:documentation>Represents the unique identity of the user that initiated the transaction on the SenderAppID</xsd:documentation>
+</xsd:annotation>
+</xsd:attribute>
+<xsd:anyAttribute namespace="##other" processContents="lax"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+<xsd:complexType name="TransactionGroupIDType">
+<xsd:simpleContent>
+<xsd:extension base="tsmd:TransactionGroupIDTypeStringType">
+<xsd:anyAttribute namespace="##other" processContents="lax"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+<xsd:simpleType name="TransactionGroupIDTypeStringType">
+<xsd:restriction base="xsd:string">
+<xsd:minLength value="1"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="Metadata">
+<xsd:annotation>
+<xsd:documentation>Metadata that can be specified by a client.</xsd:documentation>
+</xsd:annotation>
+<xsd:complexType>
+<xsd:complexContent>
+<xsd:extension base="tsmd:MetadataType">
+<xsd:anyAttribute namespace="##other" processContents="lax"/>
+</xsd:extension>
+</xsd:complexContent>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="SenderID" type="tsmd:SenderIDType">
+<xsd:annotation>
+<xsd:documentation>This is the identifier of the sending system</xsd:documentation>
+</xsd:annotation>
+</xsd:element>
+<xsd:element name="TransactionGroupID" type="tsmd:TransactionGroupIDType">
+<xsd:annotation>
+<xsd:documentation>This is an optional identifier to be used by a system when several technical transactions are representing one business transaction. Example: Business transaction impplemented via a request and call-back transaction. The call-back will have a new MessageId as it is a new message but might have the same CorrelationId. The definition of the values is owned by the system sending the message.</xsd:documentation>
+</xsd:annotation>
+</xsd:element>
+</xsd:schema>
+<!-- edited with XMLSpy v2011 sp1 (x64) (http://www.altova.com) by Soteri Panagou (Telkom SA Limited) -->
+<xs:schema targetNamespace="http://eai.telkom.co.za/schemas/RequestRecharge/20111130/DataModel/Schema.xsd" version="1" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://eai.telkom.co.za/schemas/RequestRecharge/20111130/DataModel/Schema.xsd">
+<xs:complexType name="FixedRechargeRequestType">
+<xs:choice>
+<xs:element name="RechargeReferenceNumber" type="xs:string">
+<xs:annotation>
+<xs:documentation>A unique reference number per recharge transaction generated by Telkom. Received from ValidateRecharge.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:sequence>
+<xs:element name="ClientRechargeReferenceNumber">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by the client</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="35"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="TerminalID" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Indicates which physical terminal the transaction originated from. If not provided a default value of 9999 is assumed</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="MerchantID">
+<xs:annotation>
+<xs:documentation>An identification of a Telkom internal merchant who is registered with Telkom to do recharge transactions.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="50"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="DesignationNumber">
+<xs:annotation>
+<xs:documentation>The mobile phone number to recharge.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="SubAccountNumber" minOccurs="0" type="xs:int">
+<xs:annotation>
+<xs:documentation>The number indicating the sub account to be recharged.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="RequestedAmountInCents" type="xs:int">
+<xs:annotation>
+<xs:documentation>Amount to recharge account in cents. E.g. R50.00 would be 5000</xs:documentation>
+</xs:annotation>
+</xs:element>
+</xs:sequence>
+</xs:choice>
+</xs:complexType>
+<xs:complexType name="FixedRechargeResponseType">
+<xs:sequence>
+<xs:element name="RechargeReferenceNumber" minOccurs="0" type="xs:string">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by Telkom</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="ClientRechargeReferenceNumber">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by the client</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="35"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="DesignationNumber">
+<xs:annotation>
+<xs:documentation>The mobile phone number to recharge.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="SubAccountNumber" minOccurs="0" type="xs:int">
+<xs:annotation>
+<xs:documentation>The number indicating the sub account to be recharged.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="AccountBalanceInCents" minOccurs="0" type="xs:int">
+<xs:annotation>
+<xs:documentation>The account balance post recharge</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="RequestedAmountInCents" type="xs:int">
+<xs:annotation>
+<xs:documentation>Amount to recharge account in cents. E.g. R50.00 would be 5000</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:any namespace="##other" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="MobileRechargeRequestType">
+<xs:choice>
+<xs:element name="RechargeReferenceNumber" type="xs:string">
+<xs:annotation>
+<xs:documentation>A unique reference number per recharge transaction generated by Telkom. Received from ValidateRecharge.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:sequence>
+<xs:element name="ClientRechargeReferenceNumber">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by the client</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="35"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="TerminalID" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Indicates which physical terminal the transaction originated from. If not provided a default value of 9999 is assumed</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="MerchantID">
+<xs:annotation>
+<xs:documentation>An identification of a Telkom internal merchant who is registered with Telkom to do recharge transactions.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="50"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="MSISDN">
+<xs:annotation>
+<xs:documentation>The mobile phone number to recharge.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="RequestedAmountInCents" type="xs:int">
+<xs:annotation>
+<xs:documentation>Amount to recharge account in cents. E.g. R50.00 would be 5000</xs:documentation>
+</xs:annotation>
+</xs:element>
+</xs:sequence>
+</xs:choice>
+</xs:complexType>
+<xs:complexType name="MobileRechargeResponseType">
+<xs:sequence>
+<xs:element name="RechargeReferenceNumber" minOccurs="0" type="xs:string">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by Telkom</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="ClientRechargeReferenceNumber">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by the client</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="35"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="MSISDN">
+<xs:annotation>
+<xs:documentation>The worldcall card number to recharge.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="AccountBalanceInCents" minOccurs="0" type="xs:int">
+<xs:annotation>
+<xs:documentation>The account balance post recharge</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="RequestedAmountInCents" type="xs:int">
+<xs:annotation>
+<xs:documentation>Amount to recharge account in cents. E.g. R50.00 would be 5000</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:any namespace="##other" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="WorldCallCardRechargeRequestType">
+<xs:choice>
+<xs:element name="RechargeReferenceNumber" type="xs:string">
+<xs:annotation>
+<xs:documentation>A unique reference number per recharge transaction generated by Telkom. Received from ValidateRecharge.</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:sequence>
+<xs:element name="ClientRechargeReferenceNumber">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by the client</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="35"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="TerminalID" minOccurs="0">
+<xs:annotation>
+<xs:documentation>Indicates which physical terminal the transaction originated from. If not provided a default value of 9999 is assumed</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="MerchantID">
+<xs:annotation>
+<xs:documentation>An identification of a Telkom internal merchant who is registered with Telkom to do recharge transactions.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="50"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="CardNumber">
+<xs:annotation>
+<xs:documentation>The worldcall card number to recharge.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="16"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="RequestedAmountInCents" type="xs:int">
+<xs:annotation>
+<xs:documentation>Amount to recharge account in cents. E.g. R50.00 would be 5000</xs:documentation>
+</xs:annotation>
+</xs:element>
+</xs:sequence>
+</xs:choice>
+</xs:complexType>
+<xs:complexType name="WorldCallCardRechargeResponseType">
+<xs:sequence>
+<xs:element name="RechargeReferenceNumber" minOccurs="0" type="xs:string">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by Telkom</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="ClientRechargeReferenceNumber">
+<xs:annotation>
+<xs:documentation>A unique reference number per top-up transaction generated by the client</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="35"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="CardNumber">
+<xs:annotation>
+<xs:documentation>The mobile phone number to recharge.</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="16"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="AccountBalanceInCents" minOccurs="0" type="xs:int">
+<xs:annotation>
+<xs:documentation>The account balance post recharge</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="RequestedAmountInCents" type="xs:int">
+<xs:annotation>
+<xs:documentation>Amount to recharge account in cents. E.g. R50.00 would be 5000</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:any namespace="##other" minOccurs="0" processContents="lax" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="RequestType">
+<xs:choice>
+<xs:element name="Fixed" type="FixedRechargeRequestType"/>
+<xs:element name="Mobile" type="MobileRechargeRequestType"/>
+<xs:element name="WorldCallCard" type="WorldCallCardRechargeRequestType"/>
+</xs:choice>
+</xs:complexType>
+<xs:complexType name="ResponseType">
+<xs:sequence>
+<xs:element ref="Result"/>
+<xs:element name="Payload" minOccurs="0">
+<xs:complexType>
+<xs:choice>
+<xs:element name="Fixed" type="FixedRechargeResponseType"/>
+<xs:element name="Mobile" type="MobileRechargeResponseType"/>
+<xs:element name="WorldCallCard" type="WorldCallCardRechargeResponseType"/>
+</xs:choice>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="ResultType">
+<xs:annotation>
+<xs:documentation>The Result Reporting Message Structure</xs:documentation>
+</xs:annotation>
+<xs:sequence>
+<xs:element name="ResultCode">
+<xs:annotation>
+<xs:documentation> Container type for the mandatory result code. Three different statuses: success, fail and reject. - Success is indicated with the value 0. - Failure(indicated that a resend could possible be successful) is represented by negative values - Rejection(indicated that a resend would be refected again) by positive values. </xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:int"/>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ResultMsgCode" minOccurs="0">
+<xs:annotation>
+<xs:documentation> Container type for the optional result message code. The recommended way is to concatenate the system identifier with the specific error code number.This is only recommended and not enforced in the validation. </xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+<xs:maxLength value="64"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ResultMsg" minOccurs="0">
+<xs:annotation>
+<xs:documentation> Container type for the optional detail description of the result message code. </xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:minLength value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:element name="Data">
+<xs:complexType>
+<xs:sequence>
+<xs:element ref="Request"/>
+<xs:element minOccurs="0" ref="Response"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element name="FixedRechargeRequest" type="FixedRechargeRequestType"/>
+<xs:element name="FixedRechargeResponse" type="FixedRechargeResponseType"/>
+<xs:element name="MobileRechargeRequest" type="MobileRechargeRequestType"/>
+<xs:element name="MobileRechargeResponse" type="MobileRechargeResponseType"/>
+<xs:element name="Request" type="RequestType"/>
+<xs:element name="Response" type="ResponseType"/>
+<xs:element name="Result" type="ResultType"/>
+</xs:schema>
+</wsdl:types>
+
+<wsdl:message name="RequestRechargeRequest">
+<wsdl:part name="ServicePart-RequestRechargeRequest" element="ns2:Request"/>
+</wsdl:message>
+<wsdl:message name="RequestRechargeResponse">
+<wsdl:part name="ServicePart-RequestRechargeResponse" element="ns3:Response"/>
+</wsdl:message>
+<wsdl:message name="RequestRechargeFault">
+<wsdl:part name="ServicePart-RequestRechargeFault" element="eaifault:Exception"/>
+</wsdl:message>
+<wsdl:message name="WSAHeader-Action">
+<wsdl:part name="WSAHeaderPart-Action" element="ns0:Action"/>
+</wsdl:message>
+<wsdl:message name="WSAHeader-MessageID">
+<wsdl:part name="WSAHeaderPart-MessageID" element="ns0:MessageID"/>
+</wsdl:message>
+<wsdl:message name="WSAHeader-From">
+<wsdl:part name="WSAHeaderPart-From" element="ns0:From"/>
+</wsdl:message>
+<wsdl:message name="WSAHeader-RelatesTo">
+<wsdl:part name="WSAHeaderPart-RelatesTo" element="ns0:RelatesTo"/>
+</wsdl:message>
+<wsdl:message name="WSAHeader-To">
+<wsdl:part name="WSAHeaderPart-To" element="ns0:To"/>
+</wsdl:message>
+<wsdl:message name="WSAHeader-ReplyTo">
+<wsdl:part name="WSAHeaderPart-ReplyTo" element="ns0:ReplyTo"/>
+</wsdl:message>
+<wsdl:message name="WSAHeader-FaultTo">
+<wsdl:part name="WSAHeaderPart-FaultTo" element="ns0:FaultTo"/>
+</wsdl:message>
+<wsdl:message name="EAIHeader-SenderID">
+<wsdl:part name="EAIHeaderPart-SenderID" element="ns1:SenderID"/>
+</wsdl:message>
+<wsdl:message name="EAIHeader-Metadata">
+<wsdl:part name="EAIHeaderPart-Metadata" element="ns1:Metadata"/>
+</wsdl:message>
+<wsdl:message name="EAIHeader-TransactionGroupID">
+<wsdl:part name="EAIHeaderPart-TransactionGroupID" element="ns1:TransactionGroupID"/>
+</wsdl:message>
+
+
+
+<wsdl:portType name="RequestRecharge_HTTP_PortType">
+<wsdl:operation name="RequestRecharge">
+<wsdl:input message="tns:RequestRechargeRequest"/>
+<wsdl:output message="tns:RequestRechargeResponse"/>
+<wsdl:fault name="RequestRechargeFault" message="tns:RequestRechargeFault"/>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="RequestRecharge_Soap11_HTTP_EPBinding" type="tns:RequestRecharge_HTTP_PortType">
+<soap11:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+<wsdl:operation name="RequestRecharge">
+<soap11:operation style="document" soapAction="RequestRecharge"/>
+<wsdl:input>
+<soap11:body use="literal"/>
+<soap11:header use="literal" message="tns:WSAHeader-Action" part="WSAHeaderPart-Action"/>
+<soap11:header use="literal" message="tns:WSAHeader-MessageID" part="WSAHeaderPart-MessageID"/>
+<soap11:header use="literal" message="tns:WSAHeader-From" part="WSAHeaderPart-From"/>
+<soap11:header use="literal" message="tns:WSAHeader-To" part="WSAHeaderPart-To"/>
+</wsdl:input>
+<wsdl:output>
+<soap11:body use="literal"/>
+<soap11:header use="literal" message="tns:WSAHeader-Action" part="WSAHeaderPart-Action"/>
+<soap11:header use="literal" message="tns:WSAHeader-MessageID" part="WSAHeaderPart-MessageID"/>
+<soap11:header use="literal" message="tns:WSAHeader-RelatesTo" part="WSAHeaderPart-RelatesTo"/>
+<soap11:header use="literal" message="tns:WSAHeader-To" part="WSAHeaderPart-To"/>
+<soap11:header use="literal" message="tns:EAIHeader-SenderID" part="EAIHeaderPart-SenderID"/>
+<soap11:header use="literal" message="tns:EAIHeader-Metadata" part="EAIHeaderPart-Metadata"/>
+<soap11:header use="literal" message="tns:EAIHeader-TransactionGroupID" part="EAIHeaderPart-TransactionGroupID"/>
+</wsdl:output>
+<wsdl:fault name="RequestRechargeFault">
+<soap11:fault name="RequestRechargeFault" use="literal"/>
+</wsdl:fault>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="RequestRechargeHTTPService">
+<wsdl:port name="RequestRecharge_Soap11_HTTP_EP" binding="tns:RequestRecharge_Soap11_HTTP_EPBinding">
+<soap11:address location="http://localhost:11001/services/RequestRecharge/SOAP11_HTTP_EP"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2019 (http://www.altova.com) by Brenda (Private) -->
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:tns="http://amazon.telkom.co.za/common/ValidateParty" xmlns:ns="http://amazon.telkom.co.za/common/ValidateParty/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://amazon.telkom.co.za/common/ValidateParty">
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://amazon.telkom.co.za/common/ValidateParty/1.0" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://amazon.telkom.co.za/common/ValidateParty/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<annotation>
+				<documentation>
+   Addresses for International Purchase order schema
+   Copyright 2000 Example.com. All rights reserved.
+  </documentation>
+			</annotation>
+			<complexType name="ValidateRespone_Type">
+				<sequence>
+					<element name="Status" type="ns:Status_Type" minOccurs="0"/>
+					<element ref="ns:Identification" minOccurs="0" maxOccurs="unbounded"/>
+					<element name="Validity" type="ns:Validity_Type" minOccurs="0"/>
+				</sequence>
+			</complexType>
+			<element name="ValidatePartyResponse" type="ns:ValidateRespone_Type"/>
+			<element name="Name" type="ns:Name_Type"/>
+			<element name="ValidateParty">
+				<complexType>
+					<complexContent>
+						<extension base="ns:ValidateParty_Type">
+							<sequence>
+								<element name="PartyIdentification" type="ns:Identification_Type" minOccurs="0"/>
+								<element name="PartyName" type="ns:Name_Type" minOccurs="0"/>
+							</sequence>
+						</extension>
+					</complexContent>
+				</complexType>
+			</element>
+			<complexType name="ValidateParty_Type"/>
+			<element name="Identification" type="ns:Identification_Type"/>
+			<complexType name="Identification_Type">
+				<sequence>
+					<element ref="ns:idType" minOccurs="0"/>
+					<element ref="ns:idNumber" minOccurs="0"/>
+				</sequence>
+			</complexType>
+			<element name="idNumber">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="60"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="idType">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="40"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<complexType name="Name_Type">
+				<sequence>
+					<element name="FirstName" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="40"/>
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="LastName" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="40"/>
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="companyName" minOccurs="0">
+						<simpleType>
+							<restriction base="string">
+								<maxLength value="60"/>
+							</restriction>
+						</simpleType>
+					</element>
+				</sequence>
+			</complexType>
+			<complexType name="Status_Type">
+				<sequence>
+					<element ref="ns:statusCode" minOccurs="0"/>
+					<element ref="ns:statusDescription" minOccurs="0"/>
+				</sequence>
+			</complexType>
+			<element name="statusCode">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="10"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="statusDescription">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="40"/>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="startDate" type="dateTime"/>
+			<element name="endDate" type="dateTime"/>
+			<complexType name="Validity_Type">
+				<sequence>
+					<element ref="ns:startDate" minOccurs="0"/>
+					<element ref="ns:endDate" minOccurs="0"/>
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="Request">
+		<wsdl:part name="Part1" element="ns:ValidateParty"/>
+	</wsdl:message>
+	<wsdl:message name="Response">
+		<wsdl:part name="Part1" element="ns:ValidatePartyResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="PortType">
+		<wsdl:operation name="ValidateParty">
+			<wsdl:input message="tns:Request"/>
+			<wsdl:output message="tns:Response"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PortTypeEndpointBinding" type="tns:PortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ValidateParty">
+			<soap:operation soapAction="ValidateParty" style="document"/>
+			<wsdl:input>
+				<soap:body parts="Part1" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body parts="Part1" use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ValidatePartyService">
+		<wsdl:port name="PortTypeEndpoint" binding="tns:PortTypeEndpointBinding">
+			<soap:address location="http://amazon.telkom.co.za/ValidateParty"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
